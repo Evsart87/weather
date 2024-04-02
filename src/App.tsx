@@ -1,24 +1,32 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useState } from "react";
+import "./App.css";
 
 function App() {
+  interface IWeather {
+    current: {
+      condition: {
+        icon: string;
+      };
+    };
+  }
+
+  const [apiData, setApiData] = useState({
+    current: { condition: { icon: "" } },
+  } as IWeather);
+
+  useEffect(() => {
+    fetch(
+      "https://api.weatherapi.com/v1/current.json?key=ccc9891a19af4cde9b982922242603&q=Perm"
+    )
+      .then((response) => response.json())
+      .then((response) => {
+        setApiData(response);
+        console.log(response);
+      });
+  }, []);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <img src={apiData.current.condition.icon} alt="icon"></img>
     </div>
   );
 }
